@@ -28,17 +28,17 @@
   </div>
 </template>
 
-<script setup lang="ts">
-defineProps<{
-  files: Array<{ name: string; type: string }>;
-  currentFile: string;
-  collapsed: boolean;
-}>();
+<script setup>
+defineProps({
+  files: Array,
+  currentFile: String,
+  collapsed: Boolean,
+});
 
-defineEmits<{
-  'toggle-sidebar': [];
-  'load-file': [fileName: string];
-}>();
+defineEmits([
+  'toggle-sidebar',
+  'load-file',
+]);
 </script>
 
 <style scoped>
@@ -144,7 +144,6 @@ defineEmits<{
   font-weight: 400;
 }
 
-/* Scrollbar styling */
 .file-tree::-webkit-scrollbar {
   width: 8px;
 }
@@ -176,4 +175,5 @@ defineEmits<{
     z-index: 10;
   }
 }
+
 </style>

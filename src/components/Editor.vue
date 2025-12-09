@@ -4,36 +4,32 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted, watch, onBeforeUnmount } from 'vue';
 import * as monaco from 'monaco-editor';
 import { setupJafaLanguage } from '../utils/jafaSyntax';
 import { EDITOR_OPTIONS, JAFA_DARK_THEME } from '../utils/monacoConfig';
 
-const props = defineProps<{
-  modelValue: string;
-}>();
+const props = defineProps({
+  modelValue: String,
+});
 
-const emit = defineEmits<{
-  'update:modelValue': [value: string];
-  change: [value: string];
-  mounted: [editor: monaco.editor.IStandaloneCodeEditor];
-  'position-change': [pos: { line: number; column: number; lines: number }];
-}>();
+const emit = defineEmits([
+  'update:modelValue',
+  'change',
+  'mounted',
+  'position-change',
+]);
 
-const editorContainer = ref<HTMLDivElement>();
-let editor: monaco.editor.IStandaloneCodeEditor | null = null;
+const editorContainer = ref();
+let editor = null;
 
 onMounted(() => {
   if (!editorContainer.value) return;
 
-  // Setup JaFA language (must be done before creating editor)
   setupJafaLanguage();
-
-  // Define theme
   monaco.editor.defineTheme('jafaDark', JAFA_DARK_THEME);
 
-  // Create editor instance
   editor = monaco.editor.create(editorContainer.value, {
     ...EDITOR_OPTIONS,
     value: props.modelValue,
@@ -41,10 +37,8 @@ onMounted(() => {
     theme: 'jafaDark',
   });
 
-  // Emit mounted event
   emit('mounted', editor);
 
-  // Track content changes
   editor.onDidChangeModelContent(() => {
     if (!editor) return;
     const value = editor.getValue();
@@ -52,7 +46,6 @@ onMounted(() => {
     emit('change', value);
   });
 
-  // Track cursor position
   editor.onDidChangeCursorPosition((e) => {
     if (!editor) return;
     const line = e.position.lineNumber;
@@ -61,23 +54,19 @@ onMounted(() => {
     emit('position-change', { line, column, lines });
   });
 
-  // Setup keyboard shortcuts
   setupKeyboardShortcuts(editor);
 
-  // Handle window resize
   const handleResize = () => {
     editor?.layout();
   };
   window.addEventListener('resize', handleResize);
 
-  // Cleanup on unmount
   onBeforeUnmount(() => {
     window.removeEventListener('resize', handleResize);
     editor?.dispose();
   });
 });
 
-// Watch for external changes to modelValue
 watch(
   () => props.modelValue,
   (newValue) => {
@@ -91,24 +80,17 @@ watch(
   }
 );
 
-// Setup keyboard shortcuts
-const setupKeyboardShortcuts = (ed: monaco.editor.IStandaloneCodeEditor) => {
-  // Ctrl+S: Save (will be handled by parent)
+const setupKeyboardShortcuts = (ed) => {
   ed.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
     console.log('Ctrl+S pressed - save triggered by editor');
-    // Parent component will handle via @save event
   });
 
-  // F5: Run (will be handled by parent)
   ed.addCommand(monaco.KeyCode.F5, () => {
     console.log('F5 pressed - run triggered by editor');
-    // Parent component will handle via @run event
   });
 
-  // Ctrl+N: New File (will be handled by parent)
-  ed.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyN, (e) => {
+  ed.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyN, () => {
     console.log('Ctrl+N pressed - new file triggered by editor');
-    // Parent component will handle via @new-file event
   });
 };
 

@@ -1,47 +1,52 @@
+// src/composables/useJafaFiles.ts
 import { ref } from 'vue';
+import localforage from 'localforage';
 
-interface JafaFile {
-  name: string;
-  type: string;
-}
+const files = ref<{ name: string; type: string }[]>([]);
+const STORAGE_KEY = 'jafa_files'; // Prefix for localforage
 
-const files = ref<JafaFile[]>([
-  { name: 'sample.jafa', type: '(code)' },
-  { name: 'JaFA.L', type: '(lexer)' },
-  { name: 'JaFA.y', type: '(parser)' },
-  { name: 'semantics.c', type: '(semantics)' },
-  { name: 'ast.c', type: '(ast)' },
-  { name: 'jafa_compiler.c', type: '(compiler)' },
-  { name: 'assembly.c', type: '(mips)' },
-  { name: 'MIPS.txt', type: '(ref)' },
-]);
+// Initialize storage
+localforage.config({ name: 'JaFA_IDE', storeName: 'files' });
 
 export function useJafaFiles() {
+  // Load all files from storage on init
+  const loadFilesList = async () => {
+    const storedFiles = await localforage.getItem(STORAGE_KEY) || [];
+    files.value = storedFiles as { name: string; type: string }[];
+    if (files.value.length === 0) {
+      // Seed default sample if empty
+      await saveFile('sample.jafa', `SUGOD\n// Default JaFA program\nHUMAN\nEND`);
+      files.value = [{ name: 'sample.jafa', type: '(code)' }];
+    }
+  };
+
+  // Load file content
   const loadFile = async (fileName: string) => {
-    try {
-      // Call Electron IPC
-      const content = await window.api.invoke('read-file', { fileName });
-      // Update editor state (handled by App)
-      return content;
-    } catch (error) {
-      console.error('Failed to load file:', error);
-      throw error;
-    }
+    return (await localforage.getItem(`content_${fileName}`)) || '';
   };
 
+  // Save file content + update list
   const saveFile = async (fileName: string, content: string) => {
-    try {
-      await window.api.invoke('write-file', { fileName, content });
-      console.log('File saved:', fileName);
-    } catch (error) {
-      console.error('Failed to save file:', error);
-      throw error;
+    await localforage.setItem(`content_${fileName}`, content);
+    
+    // Update files list if new
+    const exists = files.value.some(f => f.name === fileName);
+    if (!exists) {
+      files.value.push({ name: fileName, type: '(code)' });
     }
+    
+    // Save updated list
+    await localforage.setItem(STORAGE_KEY, files.value);
   };
 
-  return {
-    files,
-    loadFile,
-    saveFile,
+  // Create new file
+  const createNewFile = async (fileName: string = `untitled_${Date.now()}.jafa`) => {
+    await saveFile(fileName, `SUGOD\n// New JaFA file\nHUMAN\nEND`);
+    return fileName;
   };
+
+  // Init on load
+  loadFilesList();
+
+  return { files, loadFile, saveFile, createNewFile };
 }

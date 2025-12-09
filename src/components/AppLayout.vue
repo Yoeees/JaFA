@@ -38,30 +38,26 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted } from 'vue';
 import Sidebar from './Sidebar.vue';
 import HeaderBar from './HeaderBar.vue';
 import Editor from './Editor.vue';
 import OutputTabs from './OutputTabs.vue';
 import { useJafaFiles } from '../composables/useJafaFiles';
-import { useJafaRunner } from '../composables/useJafaRunner';
+import { useJafaRunner } from '../composables/useJaFARunner';
 import { useEditorState } from '../composables/useEditorState';
 
-// Get state from composables
 const { code, currentFile, output, assembly, machineCode } = useEditorState();
-const { files, loadFile, saveFile } = useJafaFiles();
+//const { files, loadFile, saveFile } = useJafaFiles();
 const { runCompiler } = useJafaRunner();
-
-// Local state
+const { files, loadFile, saveFile, createNewFile } = useJafaFiles();  // ← Add createNewFile
 const sidebarCollapsed = ref(false);
 const activeTab = ref('output');
 const running = ref(false);
 const position = ref('Ln 1, Col 1');
 
-// Lifecycle
 onMounted(async () => {
-  // Load initial file
   try {
     const content = await loadFile('sample.jafa');
     code.value = content;
@@ -70,20 +66,19 @@ onMounted(async () => {
   }
 });
 
-// Event handlers
-const onEditorMount = (editor: any) => {
+const onEditorMount = (editor) => {
   console.log('Editor mounted successfully');
 };
 
-const onCodeChange = (value: string) => {
+const onCodeChange = (value) => {
   code.value = value;
 };
 
-const updatePosition = (pos: { line: number; column: number; lines: number }) => {
+const updatePosition = (pos) => {
   position.value = `Ln ${pos.line}, Col ${pos.column} (${pos.lines} lines)`;
 };
 
-const handleLoadFile = async (fileName: string) => {
+const handleLoadFile = async (fileName) => {
   try {
     currentFile.value = fileName;
     const content = await loadFile(fileName);
@@ -92,6 +87,8 @@ const handleLoadFile = async (fileName: string) => {
     console.error('Failed to load file:', error);
   }
 };
+
+
 
 const handleSave = async () => {
   try {
@@ -116,10 +113,13 @@ const handleRun = async () => {
     running.value = false;
   }
 };
-
-const handleNewFile = () => {
-  code.value = 'SUGOD\n// New JaFA file\nHUMAN\nEND';
-  currentFile.value = 'untitled.jafa';
+const handleNewFile = async () => {
+  const fileName = prompt('New file name:', `untitled_${Date.now()}.jafa`);
+  if (fileName) {
+    const newName = await createNewFile(fileName);
+    currentFile.value = newName;
+    code.value = await loadFile(newName);
+  }
 };
 
 const clearOutput = () => {

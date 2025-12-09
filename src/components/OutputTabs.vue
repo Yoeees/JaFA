@@ -44,21 +44,21 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue';
 
-const props = defineProps<{
-  output: string;
-  assembly: string;
-  machineCode: string;
-  activeTab: string;
-  loading: boolean;
-}>();
+const props = defineProps({
+  output: String,
+  assembly: String,
+  machineCode: String,
+  activeTab: String,
+  loading: Boolean,
+});
 
-const emit = defineEmits<{
-  'tab-change': [tabId: string];
-  clear: [];
-}>();
+const emit = defineEmits([
+  'tab-change',
+  'clear',
+]);
 
 const tabs = [
   { id: 'output', label: 'OUTPUT' },
@@ -68,12 +68,12 @@ const tabs = [
 
 const outputLines = ref(0);
 
-const startResize = (e: MouseEvent) => {
+const startResize = (e) => {
   const startY = e.clientY;
-  const panel = (e.target as HTMLElement).parentElement;
+  const panel = e.target.parentElement;
   const startHeight = panel?.offsetHeight || 0;
 
-  const onMouseMove = (moveEvent: MouseEvent) => {
+  const onMouseMove = (moveEvent) => {
     const delta = moveEvent.clientY - startY;
     const newHeight = Math.max(100, startHeight - delta);
     if (panel) {
@@ -236,7 +236,6 @@ const startResize = (e: MouseEvent) => {
   background: var(--accent);
 }
 
-/* Scrollbar styling */
 .panel-content::-webkit-scrollbar {
   width: 8px;
   height: 8px;
