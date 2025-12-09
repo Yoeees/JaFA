@@ -41,7 +41,7 @@ HUMAN`);
 
   const createNewFile = async (fileName?: string) => {
     const name = fileName || `untitled_${Date.now()}.jafa`;
-    await saveFile(name, `SUGOD\n// ${name}\nHUMAN\nEND`);
+    await saveFile(name, `SUGOD\n// ${name}\nHUMAN\n`);
     return name;
   };
 
