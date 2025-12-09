@@ -1,0 +1,48 @@
+:root {
+  --bg: #0d1117;
+  --sidebar-bg: #161b22;
+  --editor-bg: #0d1117;
+  --panel-bg: #0d1117;
+  --header-bg: #161b22;
+  --fg: #e6edf3;
+  --fg-muted: #8b949e;
+  --accent: #58a6ff;
+  --border: #30363d;
+  --hover-bg: #21262d;
+  --btn-bg: #21262d;
+  --btn-fg: #e6edf3;
+  --btn-hover: #30363d;
+  --btn-secondary-bg: #21262d;
+  --btn-secondary-hover: #30363d;
+  --font-mono: "JetBrains Mono", Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+button {
+  font-family: inherit;
+}
+
+input,
+textarea {
+  font-family: var(--font-mono);
+}
