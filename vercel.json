@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/api/run", "destination": "/server.cjs" },
+    { "source": "/(.*)", "destination": "/dist/index.html" }
+  ],
+  "functions": {
+    "server.cjs": { "memory": 1024 }
+  }
+}
