@@ -1,3 +1,4 @@
+
 <template>
   <header class="header">
     <div class="header-left">
@@ -24,33 +25,29 @@
           :disabled="running"
           title="Run (F5)"
         >
-          {{ running ? '⟳ Running...' : '▶ Run' }}
+          {{ running ? '⏳ Running...' : '▶ Run' }}
         </button>
         
-        <button
-          class="btn btn-new"
-          @click="$emit('newFile')"
-          title="New file (Ctrl+N)"
-        >
-          ✚ New
-        </button>
+      <button class="btn btn-new" @click="$emit('new-file')" title="New file (Ctrl+N)">
+        ✚ New
+      </button>
       </div>
     </div>
   </header>
 </template>
 
-<script setup lang="ts">
-defineProps<{
-  currentFile: string;
-  position: string;
-  running: boolean;
-}>();
+<script setup>
+defineProps({
+  currentFile: String,
+  position: String,
+  running: Boolean,
+});
 
-defineEmits<{
-  save: [];
-  run: [];
-  'new-file': [];
-}>();
+defineEmits([
+  'save',
+  'run',
+  'new-file',
+]);
 </script>
 
 <style scoped>
