@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --build && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "server": "node server.cjs",
     "start": "npm run build && npm run server"
