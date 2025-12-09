@@ -1,9 +1,26 @@
 {
-  "rewrites": [
-    { "source": "/api/run", "destination": "/server.cjs" },
-    { "source": "/(.*)", "destination": "/dist/index.html" }
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.cjs",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
   ],
-  "functions": {
-    "server.cjs": { "memory": 1024 }
-  }
+  "routes": [
+    {
+      "src": "/api/run",
+      "dest": "/server.cjs"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/$1"
+    }
+  ]
 }
