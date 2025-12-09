@@ -45,7 +45,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 54 "JaFA.y"
+#line 53 "JaFA.y"
 
     #include "ast.h"
 
@@ -62,28 +62,27 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     SUGOD = 258,                   /* SUGOD  */
     HUMAN = 259,                   /* HUMAN  */
-    END = 260,                     /* END  */
-    BAD_TOKEN = 261,               /* BAD_TOKEN  */
-    INT_TYPE = 262,                /* INT_TYPE  */
-    CHAR_TYPE = 263,               /* CHAR_TYPE  */
-    NAME = 264,                    /* NAME  */
-    NUM_VAL = 265,                 /* NUM_VAL  */
-    CHAR_VAL = 266,                /* CHAR_VAL  */
-    STRING_VAL = 267,              /* STRING_VAL  */
-    SET = 268,                     /* SET  */
-    ADD_SET = 269,                 /* ADD_SET  */
-    SUB_SET = 270,                 /* SUB_SET  */
-    MUL_SET = 271,                 /* MUL_SET  */
-    DIV_SET = 272,                 /* DIV_SET  */
-    ADD = 273,                     /* ADD  */
-    SUB = 274,                     /* SUB  */
-    MUL = 275,                     /* MUL  */
-    DIV = 276,                     /* DIV  */
-    L_PAREN = 277,                 /* L_PAREN  */
-    R_PAREN = 278,                 /* R_PAREN  */
-    COMMA = 279,                   /* COMMA  */
-    DOT = 280,                     /* DOT  */
-    SHOW = 281                     /* SHOW  */
+    BAD_TOKEN = 260,               /* BAD_TOKEN  */
+    INT_TYPE = 261,                /* INT_TYPE  */
+    CHAR_TYPE = 262,               /* CHAR_TYPE  */
+    NAME = 263,                    /* NAME  */
+    NUM_VAL = 264,                 /* NUM_VAL  */
+    CHAR_VAL = 265,                /* CHAR_VAL  */
+    STRING_VAL = 266,              /* STRING_VAL  */
+    SET = 267,                     /* SET  */
+    ADD_SET = 268,                 /* ADD_SET  */
+    SUB_SET = 269,                 /* SUB_SET  */
+    MUL_SET = 270,                 /* MUL_SET  */
+    DIV_SET = 271,                 /* DIV_SET  */
+    ADD = 272,                     /* ADD  */
+    SUB = 273,                     /* SUB  */
+    MUL = 274,                     /* MUL  */
+    DIV = 275,                     /* DIV  */
+    L_PAREN = 276,                 /* L_PAREN  */
+    R_PAREN = 277,                 /* R_PAREN  */
+    COMMA = 278,                   /* COMMA  */
+    DOT = 279,                     /* DOT  */
+    SHOW = 280                     /* SHOW  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -92,7 +91,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 58 "JaFA.y"
+#line 57 "JaFA.y"
 
     int num;
     char ch;
@@ -101,7 +100,7 @@ union YYSTYPE
     int op;
     Expr *expr;   /* Expression AST node */
 
-#line 105 "JaFA.tab.h"
+#line 104 "JaFA.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
