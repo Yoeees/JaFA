@@ -88,8 +88,6 @@ const handleLoadFile = async (fileName) => {
   }
 };
 
-
-
 const handleSave = async () => {
   try {
     await saveFile(currentFile.value, code.value);
@@ -113,6 +111,7 @@ const handleRun = async () => {
     running.value = false;
   }
 };
+
 const handleNewFile = async () => {
   const fileName = prompt('New file name:', `untitled_${Date.now()}.jafa`);
   if (fileName) {
