@@ -579,10 +579,10 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int16 yyrline[] =
 {
        0,    83,    83,    86,    87,    91,    92,    93,    94,   100,
-     101,   102,   104,   105,   107,   123,   166,   184,   185,   186,
-     187,   188,   190,   191,   195,   196,   199,   221,   233,   235,
-     237,   238,   239,   241,   242,   243,   245,   250,   255,   257,
-     259
+     101,   102,   104,   105,   107,   123,   166,   212,   213,   214,
+     215,   216,   218,   219,   223,   224,   227,   249,   261,   263,
+     265,   266,   267,   269,   270,   271,   273,   278,   283,   285,
+     287
 };
 #endif
 
@@ -1276,53 +1276,81 @@ yyreduce:
              if(!parse_success) YYABORT;
              check_undefined((yyvsp[-2].id), yylineno);
              int idx = find_var((yyvsp[-2].id));
-             int new_val = eval_expr((yyvsp[0].expr));  /* evaluate expression */
+
+             /* === TYPE CHECK: only entero allowed for addset/etc === */
+             if (sym_table[idx].type != TYPE_INT) {
+                 fprintf(stderr, "\nError at line %d: Only 'entero' variables can use addset/subset/mulset/divset.\n", yylineno);
+                 parse_success = 0;
+                 YYABORT;
+             }
+
+             /* === GENERATE ASSEMBLY + MACHINE CODE === */
+             generate_modify_with_expr((yyvsp[-2].id), (yyvsp[-1].op), (yyvsp[0].expr));
+
+             /* === UPDATE SYMBOL TABLE VALUE (for printa) === */
+             int new_val = eval_expr((yyvsp[0].expr));
              switch((yyvsp[-1].op)) {
-                 case SET:     break; /* already stored */
-                 case ADD_SET: new_val += sym_table[idx].value; break;
-                 case SUB_SET: new_val = sym_table[idx].value - new_val; break;
-                 case MUL_SET: new_val *= sym_table[idx].value; break;
-                 case DIV_SET: check_division((yyvsp[0].expr)->value, yylineno); new_val = sym_table[idx].value / eval_expr((yyvsp[0].expr)); break;
+                 case SET: 
+                     new_val = new_val; /* just assign */
+                     break;
+                 case ADD_SET: 
+                     new_val = sym_table[idx].value + new_val; 
+                     break;
+                 case SUB_SET: 
+                     new_val = sym_table[idx].value - new_val; 
+                     break;
+                 case MUL_SET: 
+                     new_val = sym_table[idx].value * new_val; 
+                     break;
+                 case DIV_SET: 
+                     if (new_val == 0) {
+                         fprintf(stderr, "\nError at line %d: Division by zero in divset.\n", yylineno);
+                         parse_success = 0;
+                         YYABORT;
+                     }
+                     new_val = sym_table[idx].value / new_val; 
+                     break;
              }
              sym_table[idx].value = new_val;
+
              free((yyvsp[-2].id));
              free_expr((yyvsp[0].expr));
          }
-#line 1292 "JaFA.tab.c"
+#line 1320 "JaFA.tab.c"
     break;
 
   case 17: /* mode: SET  */
-#line 184 "JaFA.y"
+#line 212 "JaFA.y"
                { (yyval.op) = SET; }
-#line 1298 "JaFA.tab.c"
+#line 1326 "JaFA.tab.c"
     break;
 
   case 18: /* mode: ADD_SET  */
-#line 185 "JaFA.y"
+#line 213 "JaFA.y"
                { (yyval.op) = ADD_SET; }
-#line 1304 "JaFA.tab.c"
+#line 1332 "JaFA.tab.c"
     break;
 
   case 19: /* mode: SUB_SET  */
-#line 186 "JaFA.y"
+#line 214 "JaFA.y"
                { (yyval.op) = SUB_SET; }
-#line 1310 "JaFA.tab.c"
+#line 1338 "JaFA.tab.c"
     break;
 
   case 20: /* mode: MUL_SET  */
-#line 187 "JaFA.y"
+#line 215 "JaFA.y"
                { (yyval.op) = MUL_SET; }
-#line 1316 "JaFA.tab.c"
+#line 1344 "JaFA.tab.c"
     break;
 
   case 21: /* mode: DIV_SET  */
-#line 188 "JaFA.y"
+#line 216 "JaFA.y"
                { (yyval.op) = DIV_SET; }
-#line 1322 "JaFA.tab.c"
+#line 1350 "JaFA.tab.c"
     break;
 
   case 26: /* arg: value  */
-#line 200 "JaFA.y"
+#line 228 "JaFA.y"
       {
         if(!parse_success) YYABORT;
 
@@ -1344,11 +1372,11 @@ yyreduce:
 
         free_expr((yyvsp[0].expr));
       }
-#line 1348 "JaFA.tab.c"
+#line 1376 "JaFA.tab.c"
     break;
 
   case 27: /* arg: STRING_VAL  */
-#line 222 "JaFA.y"
+#line 250 "JaFA.y"
         { if(parse_success){
               char *s = (yyvsp[0].str);
               int len = strlen(s);
@@ -1357,95 +1385,95 @@ yyreduce:
           }
           free((yyvsp[0].str));
         }
-#line 1361 "JaFA.tab.c"
+#line 1389 "JaFA.tab.c"
     break;
 
   case 28: /* compute: value  */
-#line 233 "JaFA.y"
+#line 261 "JaFA.y"
                 { free_expr((yyvsp[0].expr)); }
-#line 1367 "JaFA.tab.c"
+#line 1395 "JaFA.tab.c"
     break;
 
   case 29: /* value: combine  */
-#line 235 "JaFA.y"
+#line 263 "JaFA.y"
                   { (yyval.expr) = (yyvsp[0].expr); }
-#line 1373 "JaFA.tab.c"
+#line 1401 "JaFA.tab.c"
     break;
 
   case 30: /* combine: factor  */
-#line 237 "JaFA.y"
+#line 265 "JaFA.y"
                  { (yyval.expr) = (yyvsp[0].expr); }
-#line 1379 "JaFA.tab.c"
+#line 1407 "JaFA.tab.c"
     break;
 
   case 31: /* combine: combine ADD factor  */
-#line 238 "JaFA.y"
+#line 266 "JaFA.y"
                              { (yyval.expr) = mk_bin(EX_ADD, (yyvsp[-2].expr), (yyvsp[0].expr)); }
-#line 1385 "JaFA.tab.c"
+#line 1413 "JaFA.tab.c"
     break;
 
   case 32: /* combine: combine SUB factor  */
-#line 239 "JaFA.y"
+#line 267 "JaFA.y"
                              { (yyval.expr) = mk_bin(EX_SUB, (yyvsp[-2].expr), (yyvsp[0].expr)); }
-#line 1391 "JaFA.tab.c"
+#line 1419 "JaFA.tab.c"
     break;
 
   case 33: /* factor: base  */
-#line 241 "JaFA.y"
+#line 269 "JaFA.y"
                { (yyval.expr) = (yyvsp[0].expr); }
-#line 1397 "JaFA.tab.c"
+#line 1425 "JaFA.tab.c"
     break;
 
   case 34: /* factor: factor MUL base  */
-#line 242 "JaFA.y"
+#line 270 "JaFA.y"
                           { (yyval.expr) = mk_bin(EX_MUL, (yyvsp[-2].expr), (yyvsp[0].expr)); }
-#line 1403 "JaFA.tab.c"
+#line 1431 "JaFA.tab.c"
     break;
 
   case 35: /* factor: factor DIV base  */
-#line 243 "JaFA.y"
+#line 271 "JaFA.y"
                           { (yyval.expr) = mk_bin(EX_DIV, (yyvsp[-2].expr), (yyvsp[0].expr)); }
-#line 1409 "JaFA.tab.c"
+#line 1437 "JaFA.tab.c"
     break;
 
   case 36: /* base: NUM_VAL  */
-#line 246 "JaFA.y"
+#line 274 "JaFA.y"
         {
             (yyval.expr) = mk_const((yyvsp[0].num));
             (yyval.expr)->expr_type = EXPR_INT;
         }
-#line 1418 "JaFA.tab.c"
+#line 1446 "JaFA.tab.c"
     break;
 
   case 37: /* base: CHAR_VAL  */
-#line 251 "JaFA.y"
+#line 279 "JaFA.y"
         {
             (yyval.expr) = mk_const((yyvsp[0].ch));    
             (yyval.expr)->expr_type = EXPR_CHAR;
         }
-#line 1427 "JaFA.tab.c"
+#line 1455 "JaFA.tab.c"
     break;
 
   case 38: /* base: NAME  */
-#line 256 "JaFA.y"
+#line 284 "JaFA.y"
          { check_undefined((yyvsp[0].id), yylineno); (yyval.expr) = mk_var((yyvsp[0].id)); free((yyvsp[0].id)); }
-#line 1433 "JaFA.tab.c"
+#line 1461 "JaFA.tab.c"
     break;
 
   case 39: /* base: L_PAREN value R_PAREN  */
-#line 257 "JaFA.y"
+#line 285 "JaFA.y"
                              { (yyval.expr) = (yyvsp[-1].expr); }
-#line 1439 "JaFA.tab.c"
+#line 1467 "JaFA.tab.c"
     break;
 
   case 40: /* base: SUB base  */
-#line 259 "JaFA.y"
+#line 287 "JaFA.y"
                 { Expr *zero = mk_const(0); (yyval.expr) = mk_bin(EX_SUB, zero, (yyvsp[0].expr)); }
-#line 1445 "JaFA.tab.c"
+#line 1473 "JaFA.tab.c"
     break;
 
 
-#line 1449 "JaFA.tab.c"
+#line 1477 "JaFA.tab.c"
 
       default: break;
     }
@@ -1638,7 +1666,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 261 "JaFA.y"
+#line 289 "JaFA.y"
 
 
 
