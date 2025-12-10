@@ -1,42 +1,48 @@
-# JaFa-FrontEnd
+# JaFA IDE – A Full JaFA Compiler + Web IDE
+# Final Project - Programming Language
+**JaFA** (Jeg and Fabe) is a playful, educational programming language with Bisaya-inspired keywords — now with a **beautiful, fully functional online IDE** that runs your **real lex/yacc C compiler** in the browser!
 
-This template should help get you started developing with Vue 3 in Vite.
+Live Web App → https://jafa-pl.vercel.app
 
-## Recommended IDE Setup
+![JaFA IDE Screenshot](https://i.imgur.com/0qJ0q0q.png)  
+*(Dark theme, Monaco editor, real-time assembly + machine code output, file persistence)*
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Features
 
-## Recommended Browser Setup
+- Full JaFA → MIPS assembly → machine code compiler (written in C + lex/yacc)
+- Syntax highlighting, autocomplete, hover docs
+- Three-panel output: Runtime Output | Assembly | Machine Code
+- Persistent files (saved in your browser forever using IndexedDB)
+- Create, save, load, auto-save — just like VS Code
+- 100% web-based — no install needed
+- Runs your actual compiled `jafa` binary on the server
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## Try It Now
 
-## Type Support for `.vue` Imports in TS
+https://jafa-pl.vercel.app
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+Just open it and start coding!
 
-## Customize configuration
+## Run Locally (Developers)
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+```bash
+# 1. Clone the repo
+git clone https://github.com/Yoeees/JaFA.git
+cd JaFA
 
-## Project Setup
-
-```sh
+# 2. Install frontend deps
 npm install
-```
 
-### Compile and Hot-Reload for Development
+# 3. Build the JaFA compiler (C backend)
+cd backend
+make          # generates ./jafa
+cd ..
 
-```sh
+# 4. Run both servers
+# Terminal 1 – Frontend (hot reload)
 npm run dev
-```
 
-### Type-Check, Compile and Minify for Production
+# Terminal 2 – Backend (API + compiler)
+npm run server
 
-```sh
-npm run build
-```
+# Open http://localhost:5173
