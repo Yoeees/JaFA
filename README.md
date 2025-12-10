@@ -16,8 +16,8 @@ This project includes a **complete compiler** (lex + yacc → MIPS assembly → 
 - Triple output panels:
   - Runtime Output (with input support)
   - Generated MIPS Assembly
-  - Final Machine Code (hex)
-- **Persistent file system** using IndexedDB — your files stay forever in the browser
+  - Final Machine Code (hex) 
+- **Persistent file system** using IndexedDB — your files stay forever in the browser (somehow not working)
 - Create, rename, delete, auto-save — feels just like VS Code
 - 100% web-based — no installation required
 - Server runs your actual compiled `jafa` binary (not emulated or interpreted!)
