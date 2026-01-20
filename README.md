@@ -39,8 +39,6 @@ Open the link, start typing, and hit **Run** — instant results!
 | `letra`        | Character variable       | `letra grade = 'A';`       |
 | `decimal`      | Float/double             | `decimal gpa = 1.25;`      |
 | `printa()`     | Print anything           | `printa("Pila na? ", age);`|
-| `basaha()`     | Read input               | `basaha(&age);`            |
-| `kung` / `o` / `dili` | if / else if / else | `kung (age > 18) { ... }`  |
 | `addset`       | +=                       | `addset score 10;`         |
 | `subset`       | -=                       | `subset lives 1;`          |
 | `mulset`       | *=                       | `mulset total 2;`          |
