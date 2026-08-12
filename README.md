@@ -1,4 +1,4 @@
-# JaFA IDE — A Full-Stack Web IDE for JaFA Programming Language for our FINAL PROJECT IN PROGRAMMING LANGUAGE🌴✨
+# JaFA IDE — A Full-Stack Web IDE for JaFA Programming Language for our FINAL PROJECT IN PROGRAMMING LANGUAGE
 
 **JaFA** (short for *Jeg and Fabe*) is a fun, educational programming language with **C-like syntax and Bisaya (Cebuano)-inspired keywords**.  
 This project includes a **complete compiler** (lex + yacc → MIPS assembly → machine code) and a **beautiful online IDE** that runs everything in the browser — including executing your real C-compiled `jafa` binary on the server!
@@ -8,7 +8,7 @@ This project includes a **complete compiler** (lex + yacc → MIPS assembly → 
 ![JaFA IDE Screenshot](https://i.imgur.com/0qJ0q0q.png)  
 *Dark theme • Monaco Editor • Real-time assembly & machine code • Persistent files*
 
-## 🚀 Features
+##  Features
 
 - **Full JaFA → MIPS Assembly → Machine Code** compiler (written in C using flex & bison)
 - Powered by **Monaco Editor** (the same engine as VS Code)
@@ -22,13 +22,13 @@ This project includes a **complete compiler** (lex + yacc → MIPS assembly → 
 - 100% web-based — no installation required
 - Server runs your actual compiled `jafa` binary (not emulated or interpreted!)
 
-## 🖥️ Try It Now
+##  Try It Now
 
-👉 https://jafa-pl.vercel.app
+ https://jafa-pl.vercel.app
 
 Open the link, start typing, and hit **Run** — instant results!
 
-## 🛠️ Language Quick Reference (JaFA Keywords)
+##  Language Quick Reference (JaFA Keywords)
 
 | JaFA Keyword  | English Meaning         | Example                    |
 |----------------|--------------------------|----------------------------|
@@ -46,7 +46,7 @@ Open the link, start typing, and hit **Run** — instant results!
 
 *More keywords and full grammar in [`docs/syntax.md`](./docs/syntax.md)*
 
-## 💻 Run Locally (For Developers)
+##  Run Locally (For Developers)
 
 ```bash
 # 1. Clone the repository
